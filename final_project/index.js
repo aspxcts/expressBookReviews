@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session')
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
+//const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYiIsInVzZXJQYXNzd29yZCI6InBhc3N3b3JkMiIsImlhdCI6MTczNzk5NzQ1OCwiZXhwIjoxNzM4MDAxMDU4fQ.etlf2UnjogKFidzjJXYVOMNRw3h47caq0k6tGZVyBXk";
 
 const app = express();
 
