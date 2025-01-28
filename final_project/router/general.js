@@ -20,46 +20,75 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/', function (req, res) {
-    const booksList = JSON.stringify(books);
-    return res.status(200).send(`List of books available: \n${booksList}`);
+    const promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(books), 600);
+    });
+    promise.then((result) => {
+    return res.status(200).json({ books: result });
+    });
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn', function (req, res) {
-    let isbn = req.params.isbn;
-    let booksList=Object.values(books)
-    let book = booksList.find(b => b.isbn===isbn);
-    if (book) {
-      let bookDetails = JSON.stringify(book);
-      res.send(`Book details for ISBN ${isbn}: ${bookDetails}`);
-    } else {
-      res.send(`No book found for ISBN ${isbn}`);}
- });
+public_users.get("/isbn/:isbn", async function (req, res) {
+  //Write your code here
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve(books[req.params.isbn]), 600);
+  });
+
+  const book = await promise;
+
+  if (book) {
+    return res.status(200).json({ book });
+  } else {
+    return res.status(404).json({ message: "Book not found" });
+  }
+});
   
   // Get book details based on author
-  public_users.get('/author/:author',function (req, res) {
-   let author = req.params.author;
-   let booksList=Object.values(books)
-   let book = booksList.find(b => b.author===author);
-  
-     if (book) {
-      let bookDetails = JSON.stringify(book);
-      res.send(`Book details for author ${author}: ${bookDetails}`);
-    } else {
-      res.send(`No book found for author ${author}`);}
+public_users.get("/author/:author", async function (req, res) {
+  //Write your code here
+  const authorName = req.params.author;
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const filteredBooks = Object.values(books).filter(
+        (b) => b.author === authorName
+      );
+      resolve(filteredBooks);
+    }, 600);
   });
+
+  const filteredBooks = await promise;
+
+  if (filteredBooks.length > 0) {
+    return res.status(200).json({ books: filteredBooks });
+  } else {
+    return res.status(404).json({ message: "Book not found" });
+  }
+});
+
   
   // Get all books based on title
-  public_users.get('/title/:title',function (req, res) {
-    let title = req.params.title;
-    let booksList=Object.values(books)
-   let book = booksList.find(b => b.title===title);
-    if (book) {
-      let bookDetails = JSON.stringify(book);
-      res.send(`Book details for title ${title}: ${bookDetails}`);
-    } else {
-      res.send(`No book found for title ${title}`);}
+public_users.get("/title/:title", async function (req, res) {
+  //Write your code here
+  const title = req.params.title;
+
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const filteredBooks = Object.values(books).filter(
+        (b) => b.title === title
+      );
+      return resolve(filteredBooks);
+    }, 600);
   });
+
+  const filteredBooks = await promise;
+
+  if (filteredBooks.length > 0) {
+    return res.status(200).json({ books: filteredBooks });
+  } else {
+    return res.status(404).json({ message: "Book not found" });
+  }
+});
   
   //  Get book review
   public_users.get('/review/:isbn',function (req, res) {
