@@ -41,8 +41,8 @@ regd_users.post("/login", (req,res) => {
     const user = users.find(u => u.username === username && u.password === password);
   
     if (username === user.username && password === user.password) {
-      const accessToken = jwt.sign({ username, userPassword: password }, "secretKey", { expiresIn: '1h' });
-      req.session.accessToken = accessToken;
+      const accessToken = jwt.sign({ username, userPassword: password }, "fingerprint_customer", { expiresIn: '1h' });
+      req.session.accessToken = {accessToken};
   
       return res.status(200).json({ message: 'Login successful',accessToken });
     } else {

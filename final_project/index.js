@@ -13,15 +13,21 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 
 app.use("/customer/auth/*", function auth(req,res,next){
     const authHeader = req.headers.authorization;
+    console.log(authHeader)
     if (!authHeader) {
         return res.status(401).json({ message: "No token provided" });
     }
 
-    const token = authHeader.split(' ')[1];
+    if (authHeader) {
+        
+        console.log('HERE'+authHeader);
+        var token = authHeader;
+        
+    }
 
-    jwt.verify(token, jwtSecret, (err, decoded) => {
+    jwt.verify(token, "fingerprint_customer", (err, decoded) => {
         if (err) {
-            return res.status(401).json({ message: "Invalid token" });
+            return res.status(403).json({ message: "Invalid token" + token});
         }
 
         req.user = decoded;
